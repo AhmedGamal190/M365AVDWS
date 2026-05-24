@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -68,25 +68,27 @@
     "imageSKU": "2019-Datacenter",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "adPubIPName": "[concat('adPubIP', parameters('deploymentNumber'))]",
-    "adNicName": "[concat('ad-',parameters('NetworkInterfaceName'), parameters('deploymentNumber'))]"
+    "adNicName": "[concat('ad-', parameters('NetworkInterfaceName'), parameters('deploymentNumber'))]"
   },
   "resources": [
     {
-      "name": "[variables('adPubIPName')]",
       "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('adPubIPName')]",
       "location": "[parameters('location')]",
-      "apiVersion": "2019-12-01",
 
       "sku": {
-        "name": "Standard"
+        "name": "Standard",
+        "tier": "Regional"
+      },
+
+      "properties": {
+        "publicIPAllocationMethod": "Static",
+        "publicIPAddressVersion": "IPv4"
       },
 
       "tags": {
         "displayName": "adPubIP"
-      },
-
-      "properties": {
-        "publicIPAllocationMethod": "Static"
       }
     },
     {
